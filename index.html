@@ -503,7 +503,7 @@ mjx-container { overflow-x: auto; overflow-y: hidden; max-width: 100%; padding: 
     </div>
   </details>
 </div>
-<div class="hidden-content" id="fullContent">
+<div class="hidden-content<div class="hidden-content visible" id="fullContent">
 
 <div class="problem-card">
   <div class="problem-header">Α2</div>
@@ -1036,53 +1036,21 @@ mjx-container { overflow-x: auto; overflow-y: hidden; max-width: 100%; padding: 
 <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
-function showFullContent() {
-  const hidden = document.getElementById('fullContent');
-  const btn = document.querySelector('.continue-btn');
-  if (hidden) {
-    hidden.classList.add('visible');
-    if (btn) {
-      btn.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-      btn.style.opacity = '0';
-      btn.style.transform = 'scale(0.95)';
-      setTimeout(() => { btn.style.display = 'none'; }, 400);
-    }
-    setTimeout(() => {
-      hidden.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 200);
-    if (window.MathJax && MathJax.typesetPromise) {
-      setTimeout(() => {
-        MathJax.typesetPromise().catch(function(err) {});
-      }, 300);
-    }
+(function () {
+  // Back-to-top: εμφάνιση μετά από 600px scroll
+  var btn = document.querySelector('.back-to-top');
+  if (btn) {
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > 600) btn.classList.add('visible');
+      else btn.classList.remove('visible');
+    });
   }
-}
 
-window.addEventListener('scroll', function() {
-  const btn = document.getElementById('backToTop');
-  if (window.scrollY > 600) {
-    btn.classList.add('visible');
-  } else {
-    btn.classList.remove('visible');
+  // MathJax: αρχική στοιχειοθεσία
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise().catch(function () {});
   }
-});
-
-const observer = new MutationObserver(function(mutations) {
-  mutations.forEach(function(mutation) {
-    if (mutation.target.classList && mutation.target.classList.contains('visible')) {
-      if (window.MathJax && MathJax.typesetPromise) {
-        MathJax.typesetPromise().catch(function(err) {});
-      }
-    }
-  });
-});
-
-const targetNode = document.getElementById('fullContent');
-if (targetNode) {
-  observer.observe(targetNode, { attributes: true, attributeFilter: ['class'] });
-}
-
-if (window.MathJax && MathJax.typesetPromise) {
-  MathJax.typesetPromise().catch(function(err) {});
-}
+})();
 </script>
+</div><!-- /hidden-content -->
+</div><!-- /physics-solutions -->
